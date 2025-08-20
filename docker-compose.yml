@@ -1,6 +1,18 @@
 version: "3.8"
 
 services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: quotient
+      POSTGRES_PASSWORD: quotientpass
+      POSTGRES_DB: quotientdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
   quotient-bot:
     build:
       context: .
@@ -8,9 +20,14 @@ services:
       - "8888:8888"
       - "6000:6000"
     restart: always
-
+    depends_on:
+      - postgres
     environment:
-      - PYTHONUNBUFFERED=1 # Ensure Python output is not buffered
-
+      - PYTHONUNBUFFERED=1
+      - DISCORD_TOKEN=${DISCORD_TOKEN:-your_token_here}
     volumes:
-      - ./logs:/app/logs # Mount a volume for logs
+      - ./logs:/app/logs
+      - ./src:/app/src
+
+volumes:
+  postgres_data:

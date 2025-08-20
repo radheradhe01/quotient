@@ -14,6 +14,7 @@ class LogEvents(Cog):
     def __init__(self, bot: Quotient) -> None:
         self.bot = bot
         # self.guild_log = discord.Webhook.from_url(self.bot.config.GUILD_LOGS, session=self.bot.session)
+        # Disabled webhook to avoid errors
 
     # @Cog.listener()
     # async def on_guild_join(self, guild: discord.Guild):

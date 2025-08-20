@@ -21,7 +21,8 @@ from tortoise import Tortoise
 
 import config as cfg
 import constants as csts
-from models import Guild, Timer
+from models.misc.guild import Guild
+from models.misc.Timer import Timer
 
 from .cache import CacheManager
 from .Context import Context
@@ -75,9 +76,15 @@ class Quotient(commands.AutoShardedBot):
 
     @on_startup.append
     async def __load_extensions(self):
+        print(f"🔍 Loading extensions from config: {self.config.EXTENSIONS}")
         for ext in self.config.EXTENSIONS:
-            await self.load_extension(ext)
-            print(f"Loaded extension: {ext}")
+            try:
+                await self.load_extension(ext)
+                print(f"✅ Loaded extension: {ext}")
+            except Exception as e:
+                print(f"❌ Failed to load extension {ext}: {e}")
+        print(f"📊 Total commands after loading extensions: {len(self.commands)}")
+        print(f"📊 Total cogs after loading extensions: {len(self.cogs)}")
 
     @on_startup.append
     async def __load_presistent_views(self):
@@ -135,7 +142,7 @@ class Quotient(commands.AutoShardedBot):
         """Instantiating aiohttps ClientSession and telling tortoise to create relations"""
         self.session = aiohttp.ClientSession(loop=self.loop)
         await Tortoise.init(cfg.TORTOISE)
-        await Tortoise.generate_schemas(safe=True)
+        # await Tortoise.generate_schemas(safe=True)  # Disabled - tables already exist
 
         self.cache = CacheManager(self)
         await self.cache.fill_temp_cache()
@@ -206,8 +213,9 @@ class Quotient(commands.AutoShardedBot):
         await csts.show_tip(ctx)
         await csts.remind_premium(ctx)
         await self.db.execute(
-            "INSERT INTO user_data (user_id) VALUES ($1) ON CONFLICT DO NOTHING",
+            "INSERT INTO user_data (user_id, guild_id) VALUES ($1, $2) ON CONFLICT DO NOTHING",
             ctx.author.id,
+            ctx.guild.id,
         )
 
     async def on_ready(self):

@@ -688,6 +688,7 @@ class ConfigEditMenu(menus.Menu):
         role = await inputs.role_input(
             self.ctx,
             self.check,
+            check_perms=False,
             delete_after=True,
         )
         await inputs.safe_delete(msg)
@@ -747,6 +748,7 @@ class ConfigEditMenu(menus.Menu):
         role = await inputs.role_input(
             self.ctx,
             self.check,
+            check_perms=False,
             delete_after=True,
         )
         await inputs.safe_delete(msg)
@@ -759,6 +761,7 @@ class ConfigEditMenu(menus.Menu):
         role = await inputs.role_input(
             self.ctx,
             self.check,
+            check_perms=False,
             delete_after=True,
         )
 

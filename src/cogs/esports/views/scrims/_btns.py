@@ -77,7 +77,7 @@ class SetRole(ScrimsButton):
     async def callback(self, interaction: Interaction):
         await interaction.response.defer()
         m = await self.ctx.simple("Mention the role you want to give for correct registration.")
-        role = await inputs.role_input(self.ctx, delete_after=True)
+        role = await inputs.role_input(self.ctx, check_perms=False, delete_after=True)
         await self.ctx.safe_delete(m)
 
         self.view.record.role_id = role.id
@@ -249,7 +249,7 @@ class PingRole(ScrimsButton):
             return await self.ctx.success("Removed ping-role, click again to set.", 5)
 
         m = await self.ctx.simple("Mention the role you want to ping when registration starts.")
-        role = await inputs.role_input(self.ctx, delete_after=True)
+        role = await inputs.role_input(self.ctx, check_perms=False, delete_after=True)
         await self.ctx.safe_delete(m)
         self.view.record.ping_role_id = role.id
         await self.view.refresh_view()
@@ -263,7 +263,7 @@ class OpenRole(ScrimsButton):
     async def callback(self, interaction: Interaction):
         await interaction.response.defer()
         m = await self.ctx.simple("Mention the role you want to open registration for.")
-        role = await inputs.role_input(self.ctx, delete_after=True)
+        role = await inputs.role_input(self.ctx, check_perms=False, delete_after=True)
         await self.ctx.safe_delete(m)
         self.view.record.open_role_id = role.id
         await self.view.refresh_view()

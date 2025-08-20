@@ -104,7 +104,7 @@ class ScrimManager(Cog, name="Esports"):
         room_id, password, map = truncate_string(room_id, 100), truncate_string(password, 100), truncate_string(map, 100)
 
         _e = discord.Embed(color=self.bot.color)
-        _e.set_thumbnail(url=getattr(ctx.guild.icon, "url", self.bot.user.avatar.url))
+        _e.set_thumbnail(url=getattr(ctx.guild.icon, "url", getattr(self.bot.user.avatar, "url", None)))
         _e.set_author(name=ctx.author, icon_url=ctx.author.display_avatar.url)
         _e.add_field(name="Room ID", value=room_id)
         _e.add_field(name="Password", value=password)
@@ -134,7 +134,23 @@ class ScrimManager(Cog, name="Esports"):
     async def set_eztag(self, ctx: Context, *, channel: QuoTextChannel):
         """Set a channel as eztag channel."""
         count = await EasyTag.filter(guild_id=ctx.guild.id).count()
-        guild = await Guild.get(guild_id=ctx.guild.id)
+        
+        try:
+            guild = await Guild.get(guild_id=ctx.guild.id)
+        except Exception as e:
+            # Create guild record if it doesn't exist
+            guild = await Guild.create(
+                guild_id=ctx.guild.id,
+                prefix=ctx.config.PREFIX,
+                embed_color=ctx.config.COLOR,
+                embed_footer=ctx.config.FOOTER,
+                dashboard_access='{}',
+                private_channel=None,
+                is_premium=False,
+                premium_end_time=None,
+                made_premium_by=None,
+                booster=None
+            )
 
         if count == 1 and not guild.is_premium:
             return await ctx.error(
@@ -251,7 +267,23 @@ class ScrimManager(Cog, name="Esports"):
         mentions defines required mentions, It's 4 by default.
         """
         count = await TagCheck.filter(guild_id=ctx.guild.id).count()
-        guild = await Guild.get(guild_id=ctx.guild.id)
+        
+        try:
+            guild = await Guild.get(guild_id=ctx.guild.id)
+        except Exception as e:
+            # Create guild record if it doesn't exist
+            guild = await Guild.create(
+                guild_id=ctx.guild.id,
+                prefix=ctx.config.PREFIX,
+                embed_color=ctx.config.COLOR,
+                embed_footer=ctx.config.FOOTER,
+                dashboard_access='{}',
+                private_channel=None,
+                is_premium=False,
+                premium_end_time=None,
+                made_premium_by=None,
+                booster=None
+            )
 
         if count == 1 and not guild.is_premium:
             return await ctx.error(

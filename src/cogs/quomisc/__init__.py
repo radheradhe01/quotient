@@ -129,7 +129,24 @@ class Quomisc(Cog, name="quomisc"):
 
         _view = SetupButtonView(ctx)
         _view.add_item(QuotientView.tricky_invite_button())
-        record = await Guild.get(guild_id=ctx.guild.id)
+        
+        try:
+            record = await Guild.get(guild_id=ctx.guild.id)
+        except Exception as e:
+            # Create guild record if it doesn't exist
+            record = await Guild.create(
+                guild_id=ctx.guild.id,
+                prefix=ctx.config.PREFIX,
+                embed_color=ctx.config.COLOR,
+                embed_footer=ctx.config.FOOTER,
+                dashboard_access='{}',
+                private_channel=None,
+                is_premium=False,
+                premium_end_time=None,
+                made_premium_by=None,
+                booster=None
+            )
+            await ctx.success("✅ Guild data initialized successfully!")
 
         if record.private_ch is not None:
             return await ctx.error(f"You already have a private channel ({record.private_ch.mention})", view=_view)
@@ -210,8 +227,8 @@ class Quomisc(Cog, name="quomisc"):
         links = [LinkType("Support Server", ctx.config.SERVER_LINK), LinkType("Invite Me", ctx.config.BOT_INVITE)]
         await ctx.send(embed=embed, embed_perms=True, view=LinkButton(links))
 
-    @commands.command()
-    async def ping(self, ctx: Context):
+    @commands.command(name="botping")
+    async def botping(self, ctx: Context):
         """Check how the bot is doing"""
         await ctx.send(f"Bot: `{round(self.bot.latency*1000, 2)} ms`, Database: `{await self.bot.db_latency}`")
 

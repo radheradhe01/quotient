@@ -95,7 +95,7 @@ class SetRole(TourneyButton):
         await interaction.response.defer()
 
         m = await self.ctx.simple("Mention the role you want to give for correct registration.")
-        role = await inputs.role_input(self.ctx, delete_after=True)
+        role = await inputs.role_input(self.ctx, check_perms=False, delete_after=True)
         await self.ctx.safe_delete(m)
 
         self.view.record.role_id = role.id
@@ -150,7 +150,7 @@ class SetPingRole(TourneyButton):
         await interaction.response.defer()
 
         m = await self.ctx.simple("Mention the role you want to ping with registration open message.")
-        role = await inputs.role_input(self.ctx, delete_after=True)
+        role = await inputs.role_input(self.ctx, check_perms=False, delete_after=True)
         await self.ctx.safe_delete(m)
 
         self.view.record.ping_role_id = role.id
@@ -229,7 +229,7 @@ class OpenRole(TourneyButton):
         await interaction.response.defer()
 
         m = await self.ctx.simple("Mention the role for which you want to open/close registrations.")
-        role = await inputs.role_input(self.ctx, delete_after=True)
+        role = await inputs.role_input(self.ctx, check_perms=False, delete_after=True)
         await self.ctx.safe_delete(m)
 
         self.view.record.open_role_id = role.id

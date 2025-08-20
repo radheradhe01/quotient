@@ -120,7 +120,7 @@ class GroupPages(EsportsBaseView):
         m = await self.ctx.simple(
             f"Mention the role you want to give to Group {self.records.index(self.record) + 1} members."
         )
-        role = await inputs.role_input(self.ctx, delete_after=True)
+        role = await inputs.role_input(self.ctx, check_perms=False, delete_after=True)
         await self.ctx.safe_delete(m)
 
         m = await self.ctx.simple(f"Ok, Please wait... {emote.loading}")

@@ -7,8 +7,8 @@ import discord
 from discord.ext import commands
 
 import config
-from models import Guild
-from utils import LinkButton, LinkType, QuoPaginator, discord_timestamp, truncate_string
+from models.misc.guild import Guild
+from utils import LinkButton, LinkType, QuoPaginator, truncate_string
 
 from .Cog import Cog
 

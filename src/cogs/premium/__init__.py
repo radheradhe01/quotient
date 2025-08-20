@@ -27,7 +27,8 @@ class PremiumCog(Cog, name="Premium"):
     def __init__(self, bot: Quotient):
         self.bot = bot
         self.remind_peeps_to_pay.start()
-        self.hook = discord.Webhook.from_url(self.bot.config.PUBLIC_LOG, session=self.bot.session)
+        # self.hook = discord.Webhook.from_url(self.bot.config.PUBLIC_LOG, session=self.bot.session)
+        self.hook = None  # Disabled webhook to avoid errors
 
     @commands.command()
     @commands.bot_has_permissions(embed_links=True)

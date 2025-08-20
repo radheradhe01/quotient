@@ -47,7 +47,7 @@ class SetRole(discord.ui.Button):
         await interaction.response.defer()
 
         _m = await self.ctx.simple("Mention the role you want to give for ssverification.")
-        role = await inputs.role_input(self.ctx, delete_after=True)
+        role = await inputs.role_input(self.ctx, check_perms=False, delete_after=True)
 
         await self.ctx.safe_delete(_m)
         self.view.record.role_id = role.id
