@@ -8,3 +8,5 @@ config.py
 *.log
 migrations/
 .DS_Store
+.env
+venv/
